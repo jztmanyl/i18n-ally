@@ -1,21 +1,13 @@
 import path from 'path'
 import { execSync } from 'child_process'
-import { workspace, extensions, ExtensionContext, commands, ConfigurationScope, WorkspaceFolder, ConfigurationTarget } from 'vscode'
+import { workspace, extensions, ExtensionContext, commands, ConfigurationScope, WorkspaceFolder } from 'vscode'
 import { trimEnd, uniq } from 'lodash'
 import { TagSystems } from '../tagSystems'
 import { EXT_NAMESPACE, EXT_ID, EXT_LEGACY_NAMESPACE, KEY_REG_DEFAULT, KEY_REG_ALL, DEFAULT_LOCALE_COUNTRY_MAP } from '../meta'
 import { KeyStyle, DirStructureAuto, SortCompare, TargetPickingStrategy } from '.'
 import i18n from '~/i18n'
 import { CaseStyles } from '~/utils/changeCase'
-import { ExtractionBabelOptio  static telemetry(): boolean {
-    return workspace.getConfiguration().get('telemetry.enableTelemetry') as boolean
-  }
-
-  static async updateWorkspaceConfig(section: string, value: any, scope = ConfigurationTarget.Workspace) {
-    const config = workspace.getConfiguration(EXT_NAMESPACE)
-    return await config.update(section, value, scope)
-  }
-}TMLOptions } from '~/extraction/parsers/options'
+import { ExtractionBabelOptions, ExtractionHTMLOptions } from '~/extraction/parsers/options'
 import { resolveRefactorTemplate } from '~/utils/resolveRefactorTemplate'
 
 export class Config {
@@ -603,15 +595,4 @@ export class Config {
   static get telemetry(): boolean {
     return workspace.getConfiguration().get('telemetry.enableTelemetry') as boolean
   }
-
-  static async updateWorkspaceConfig(section: string, value: any, scope = ConfigurationTarget.Workspace) {
-    const config = workspace.getConfiguration(EXT_NAMESPACE)
-    return await config.update(section, value, scope)
-  }
-}
-
-enum ConfigurationTarget {
-  Global = 1,
-  Workspace = 2,
-  WorkspaceFolder = 3
 }
