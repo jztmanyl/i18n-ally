@@ -10,6 +10,9 @@ export default class LanguageWireTranslate extends TranslateEngine {
     let apiRoot = this.apiRoot
     if (Config.languageWireApiRoot) apiRoot = Config.languageWireApiRoot.replace(/\/$/, '')
 
+    if (!apiKey) throw new Error('LanguageWire: missing API key. Configure i18n-ally.translate.languagewire.apiKey in settings.')
+    if (!options.to) throw new Error('LanguageWire: target language "to" is required.')
+
     const response = await axios.post(
       `${apiRoot}/translations/text`,
       {
@@ -27,6 +30,7 @@ export default class LanguageWireTranslate extends TranslateEngine {
           'Accept': 'application/json',
           'Authorization': `Bearer ${apiKey}`,
         },
+        timeout: 15000,
       },
     )
 
@@ -37,10 +41,11 @@ export default class LanguageWireTranslate extends TranslateEngine {
     const { text, from = 'auto', to = 'auto' } = options
 
     // Get the translated text from the response
-    const translatedText = response.data.translation?.trim()
+    const raw = response?.data?.translation
+    const translatedText = typeof raw === 'string' ? raw.trim() : undefined
 
     // Determine the detected source language
-    const detectedSource = response.data.detectedSourceLanguage?.mmtCode || from
+    const detectedSource = response?.data?.detectedSourceLanguage?.mmtCode || from
 
     const r: TranslateResult = {
       text,
